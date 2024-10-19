@@ -215,7 +215,7 @@ func exportConversationMessages(ctx *signal.Context, d at.Dir, conv *signal.Conv
 	case formatTextShort:
 		err = textShortWriteMessages(ew, msgs)
 	case formatHTML:
-		err = textShortWriteMessages(ew, msgs)
+		err = htmlWriteMessages(ew, msgs)
 	}
 
 	if err != nil {
