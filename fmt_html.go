@@ -24,7 +24,7 @@ import (
 	"github.com/tbvdm/sigtop/signal"
 )
 
-func textShortWriteMessages(ew *errio.Writer, msgs []signal.Message) error {
+func htmlWriteMessages(ew *errio.Writer, msgs []signal.Message) error {
   head := `
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +34,25 @@ func textShortWriteMessages(ew *errio.Writer, msgs []signal.Message) error {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signul</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <style>
+        section {
+            margin-bottom: 1rem;
+            width: 66%;
+            background-color: #3b3b3bff;
+            padding: 0.5rem;
+            border-radius: 5px;;
+        }
+
+        .you {
+            margin-left: 33%;
+            background-color: #195feeff;
+        }
+	span {
+            font-size: 90%;
+            display: flex;
+            justify-content: end;
+        }
+    </style>
 </head>
 
 <body>
@@ -58,12 +77,11 @@ func textShortWriteMessages(ew *errio.Writer, msgs []signal.Message) error {
 }
 
 func htmlWriteMessage(ew *errio.Writer, msg *signal.Message) {
-	fmt.Fprint(ew, "<div>")
-	name := "You"
-	if !msg.IsOutgoing() {
-		name = msg.Source.DisplayName()
+	if msg.IsOutgoing() {
+		fmt.Fprint(ew, "<section class=\"you\">")
+	} else {
+		fmt.Fprintf(ew, "<section>%s:<br>", msg.Source.DisplayName())
 	}
-	fmt.Fprintf(ew, "%s %s:", textShortFormatTime(msg.TimeSent), name)
 	if msg.Type != "incoming" && msg.Type != "outgoing" {
 		fmt.Fprintf(ew, " [%s message]", msg.Type)
 	} else {
@@ -89,10 +107,12 @@ func htmlWriteMessage(ew *errio.Writer, msg *signal.Message) {
 		}
 	}
 
-	fmt.Fprint(ew, "</div>")
+
+	fmt.Fprintf(ew, "<span>%s</span>", htmlFormatTime(msg.TimeSent))
+	fmt.Fprint(ew, "</section>")
 	fmt.Fprintln(ew)
 }
 
-func textShortFormatTime(msec int64) string {
+func htmlFormatTime(msec int64) string {
 	return time.UnixMilli(msec).Format("2006-01-02 15:04")
 }
