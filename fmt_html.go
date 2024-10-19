@@ -47,11 +47,11 @@ func htmlWriteMessages(ew *errio.Writer, msgs []signal.Message) error {
             margin-left: 33%;
             background-color: #195feeff;
         }
-	span {
-            font-size: 90%;
+		span {
+        	font-size: 90%;
             display: flex;
             justify-content: end;
-        }
+		}
     </style>
 </head>
 
@@ -108,8 +108,7 @@ func htmlWriteMessage(ew *errio.Writer, msg *signal.Message) {
 	}
 
 
-	fmt.Fprintf(ew, "<span>%s</span>", htmlFormatTime(msg.TimeSent))
-	fmt.Fprint(ew, "</section>")
+	fmt.Fprintf(ew, "<span>%s</span></section>", htmlFormatTime(msg.TimeSent))
 	fmt.Fprintln(ew)
 }
 
